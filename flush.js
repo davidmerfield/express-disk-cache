@@ -11,6 +11,8 @@ var join = require('path').join;
 // We want the writestream to close, and to stop. I think it will.
 module.exports = function (cache_directory) {
 
+  if (!cache_directory) throw new Error('Pass a cache directory');
+
   return function flush (hostname, callback) {
 
     // Often we don't care if the cache clears 

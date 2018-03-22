@@ -4,8 +4,7 @@ var on_headers = require('on-headers');
 var join = require('path').join;
 var uuid = require('uuid/v1');
 var fs = require('fs-extra');
-// var debug = console.log;
-// require('debug');
+var debug = function(){};
 
 // Regex to check the Cache-Control header to
 // determine if the response should not be cached.
@@ -14,9 +13,6 @@ var NO_CACHE_REGEX = /(?:^|,)\s*?no-cache\s*?(?:,|$)/;
 // Header strings
 var CACHE_CONTROL = 'Cache-Control';
 var CONTENT_TYPE = 'Content-Type';
-
-// Error messages
-var NO_DIRECTORY = 'Please specify a cache directory';
 
 module.exports = function (cache_directory) {
 
@@ -36,8 +32,6 @@ module.exports = function (cache_directory) {
     var _write = res.write;
     var _end = res.end;
     
-    var debug = console.log.bind(this, req.baseUrl + req.path);
-
     res.write = function (chunk, encoding) {
 
       debug('write called', chunk, encoding);

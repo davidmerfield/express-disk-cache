@@ -1,8 +1,8 @@
 {
-  "name": "cachy",
-  "version": "1.0.0",
+  "name": "express-disk-cache",
+  "version": "1.0.1",
   "main": "index.js",
-  "license": "MIT",
+  "license": "CC0",
   "dependencies": {
     "accepts": "^1.3.5",
     "bytes": "^3.0.0",

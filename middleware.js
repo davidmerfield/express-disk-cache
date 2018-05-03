@@ -128,7 +128,8 @@ module.exports = function (cache_directory) {
       // for a file like /cache/example.com/style.css?foo=123 because its file
       // extension is 'css?foo=123' I should look into whether it is possible
       // to cofigure NGINX around this, using say REGEX. But unsure for now.
-      if (Object.keys(req.query).length) {
+      // TODO remove check for EXTENSION query string to avoid this nonsense
+      if (Object.keys(req.query).length && req.query.extension === undefined) {
         debug('Has query string');
         return;        
       }

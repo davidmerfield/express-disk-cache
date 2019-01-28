@@ -167,7 +167,14 @@ module.exports = function (cache_directory) {
         cache_control = res.getHeader(CACHE_CONTROL);
         has_max_age = cache_control && cache_control.indexOf('max-age') > -1;
         cache_age = has_max_age ? 'permanent' : 'temporary';
-        protocol = req.headers['x-forwarded-proto'] || req.protocol;
+        protocol = req.protocol;
+
+        // Trust header added by proxy indicating that before the proxy
+        // the request was over HTTPS. This could be spoofed, but the worst
+        // that can happen is a cache miss. I don't want to open myself up
+        // to some dumb vulnerability by blindly copying the value of a header...
+        if (protocol === 'http' && req.headers['x-forwarded-proto'] === 'https')
+          protocol = 'https';
 
         // We create a directory structure to make life as simple as
         // possible for try_files in NGINX.

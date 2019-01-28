@@ -27,7 +27,7 @@ module.exports = function (cache_directory) {
   return function disk_cache (req, res, next){
 
     var called_end = false;
-    var stream, final_path, tmp_path, tmp_name;
+    var stream, final_path, tmp_path, tmp_name, protocol;
     var content_type, cache_control, has_max_age, cache_age;
     var _write = res.write;
     var _end = res.end;
@@ -167,6 +167,7 @@ module.exports = function (cache_directory) {
         cache_control = res.getHeader(CACHE_CONTROL);
         has_max_age = cache_control && cache_control.indexOf('max-age') > -1;
         cache_age = has_max_age ? 'permanent' : 'temporary';
+        protocol = req.headers['x-forwarded-proto'] || req.protocol;
 
         // We create a directory structure to make life as simple as
         // possible for try_files in NGINX.
@@ -175,7 +176,7 @@ module.exports = function (cache_directory) {
         final_path = join(
           cache_directory,
           req.hostname, // hostname allows the static file server to 
-          req.protocol, // protocol to allow us to preserve HTTP -> HTTPS redirects
+          protocol, // protocol to allow us to preserve HTTP -> HTTPS redirects
           cache_age, // cache_age, either permanent or temporary
           req.originalUrl
         );
